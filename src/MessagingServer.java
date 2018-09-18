@@ -20,6 +20,12 @@ public class MessagingServer {
         os.write(byte_message);
         os.flush();
 
+        int size = is.read();
+        byte[] messageIn = new byte[size];
+        is.read(messageIn, 0, size);
+
+        System.out.println(new String(messageIn));
+
         socket.close();
     }
 }
