@@ -19,5 +19,7 @@ public class MessagingServer {
         os.write(byte_message.length);
         os.write(byte_message);
         os.flush();
+
+        socket.close();
     }
 }

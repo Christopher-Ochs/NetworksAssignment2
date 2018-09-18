@@ -7,7 +7,6 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class MessagingClient {
     public static void main(String[] args) throws IOException {
@@ -20,5 +19,7 @@ public class MessagingClient {
         is.read(message, 0, size);
 
         System.out.println(new String(message));
+
+        socket.close();
     }
 }
