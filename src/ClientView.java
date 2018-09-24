@@ -113,6 +113,8 @@ public class ClientView {
             os.write(outMessage.length);
             os.write(outMessage);
             os.flush();
+
+            Platform.runLater(() -> items.getChildren().add(new Text(new String(outMessage))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,7 +125,7 @@ public class ClientView {
             int size = is.read();
             byte[] message = new byte[size];
             is.read(message, 0, size);
-            items.getChildren().add(new Text(new String(message)));
+            Platform.runLater(() -> items.getChildren().add(new Text(new String(message))));
         } catch (IOException e) {
             e.printStackTrace();
         }

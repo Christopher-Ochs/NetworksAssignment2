@@ -1,6 +1,3 @@
-import javafx.scene.image.Image;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,7 +15,7 @@ public class ConnectionHandler implements Runnable {
         is = socket.getInputStream();
     }
 
-    private void sendMessage(String message) throws IOException {
+    public void sendMessage(String message) throws IOException {
         byte[] outMessage = message.getBytes();
         os.write(outMessage.length);
         os.write(outMessage);
@@ -29,7 +26,9 @@ public class ConnectionHandler implements Runnable {
         int size = is.read();
         byte[] message = new byte[size];
         is.read(message, 0, size);
-        MessagingServer.messages.add(new String(message));
+        String stringMessage = new String(message);
+        MessagingServer.messages.add(stringMessage);
+        MessagingServer.messagesSent.get(this).add(stringMessage);
     }
 
     @Override

@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 public class MessagingClient extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setFullScreen(true);
         primaryStage.setTitle("Socket Client");
 
         GridPane root = new GridPane();
