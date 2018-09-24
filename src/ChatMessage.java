@@ -20,12 +20,12 @@ public class ChatMessage
         if (isText)
         {
             m_isText = true;
-            m_stringMessage = new String(Arrays.copyOfRange(byteArray, 2, byteArray.length));
+            m_stringMessage = new String(byteArray);
         }
         else
         {
             m_isText = false;
-            ByteArrayInputStream in = new ByteArrayInputStream(Arrays.copyOfRange(byteArray, 2, byteArray.length));
+            ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
             m_imageMessage = new Image(in);
         }
 
