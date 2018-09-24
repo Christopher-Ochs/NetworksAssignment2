@@ -15,7 +15,7 @@ public class ConnectionHandler implements Runnable {
         is = socket.getInputStream();
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(ChatMessage message) throws IOException {
         byte[] outMessage = message.getBytes();
         os.write(outMessage.length);
         os.write(outMessage);

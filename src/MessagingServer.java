@@ -6,9 +6,9 @@ import java.util.HashMap;
 
 public class MessagingServer {
 
-    static ArrayList<String> messages = new ArrayList<>();
+    static ArrayList<ChatMessage> messages = new ArrayList<>();
     static ArrayList<ConnectionHandler> connectionHandlers = new ArrayList<>();
-    static HashMap<ConnectionHandler, ArrayList<String>> messagesSent = new HashMap<>();
+    static HashMap<ConnectionHandler, ArrayList<ChatMessage>> messagesSent = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(8080);
@@ -36,8 +36,8 @@ public class MessagingServer {
     private static void updateAllSockets() {
         // Will be used to update each socket with the messages they are missing
         for (ConnectionHandler handler : connectionHandlers) {
-            ArrayList<String> messagesSentToSocket = messagesSent.get(handler);
-            for (String message : messages) {
+            ArrayList<ChatMessage> messagesSentToSocket = messagesSent.get(handler);
+            for (ChatMessage message : messages) {
                 if (!messagesSentToSocket.contains(message)) {
                     try {
                         handler.sendMessage(message);
