@@ -19,7 +19,7 @@ public class MessagingClient extends Application {
         Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.LIGHTGRAY);
         primaryStage.setScene(scene);
 
-        ClientView clientView = new ClientView(root);
+        ClientView clientView = new ClientView(root, primaryStage);
 
         primaryStage.show();
     }
