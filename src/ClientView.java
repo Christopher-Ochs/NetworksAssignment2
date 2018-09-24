@@ -13,6 +13,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.logging.SocketHandler;
 
 public class ClientView {
 
@@ -137,6 +140,14 @@ public class ClientView {
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
             if (selectedFile != null) {
                 ChatMessage message = new ChatMessage(new Image(selectedFile.toURI().toString()));
+                try {
+                    ProtocolHandler.write(os, message);
+                    Platform.runLater(() -> {
+                        items.getChildren().add(new ImageView(message.getImageMessage()));
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 System.out.println(selectedFile.toString());
             }
         });
@@ -150,7 +161,12 @@ public class ClientView {
 
             ProtocolHandler.write(os, message);
 
-            Platform.runLater(() -> items.getChildren().add(new Text(outputMessage)));
+            Platform.runLater(() -> {
+                Text text = new Text(outputMessage);
+                Font font = new Font("Arial", 12);
+                text.setFill(Color.RED);
+                items.getChildren().add(text);
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
