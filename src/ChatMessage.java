@@ -4,14 +4,30 @@ import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.util.Arrays;
 
 public class ChatMessage
 {
     private Image m_imageMessage;
     private String m_stringMessage;
     private boolean m_isText;
+
+    public ChatMessage(byte[] byteArray)
+    {
+        int value = Byte.valueOf(byteArray[1]);
+        if (value == 0)
+        {
+            m_isText = true;
+            m_stringMessage = new String(Arrays.copyOfRange(byteArray, 2, byteArray.length));
+        }
+        else
+        {
+            m_isText = false;
+            ByteArrayInputStream in = new ByteArrayInputStream(Arrays.copyOfRange(byteArray, 2, byteArray.length));
+            m_imageMessage = new Image(in);
+        }
+
+    }
 
     public ChatMessage(String stringMessage)
     {
