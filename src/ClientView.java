@@ -1,3 +1,8 @@
+/*
+    Name: Phillip Tallo and Christopher Ochs
+    Date: September 18, 2018
+    Desc: Assignment 2 Computer Networks.  Client Server Protocol.
+ */
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
