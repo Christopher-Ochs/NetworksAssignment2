@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class SocketHandler {
+public class ProtocolHandler {
 
     static ChatMessage read(InputStream is) throws IOException {
         int sizeOfSize = is.read();

@@ -16,11 +16,11 @@ public class ConnectionHandler implements Runnable {
     }
 
     public void sendMessage(ChatMessage message) throws IOException {
-        SocketHandler.write(os, message);
+        ProtocolHandler.write(os, message);
     }
 
     private void readMessage() throws IOException {
-        ChatMessage chatMessage = SocketHandler.read(is);
+        ChatMessage chatMessage = ProtocolHandler.read(is);
         MessagingServer.messages.add(chatMessage);
         MessagingServer.messagesSent.get(this).add(chatMessage);
     }

@@ -148,7 +148,7 @@ public class ClientView {
             messageField.setText("");
             ChatMessage message = new ChatMessage(outputMessage);
 
-            SocketHandler.write(os, message);
+            ProtocolHandler.write(os, message);
 
             Platform.runLater(() -> items.getChildren().add(new Text(outputMessage)));
         } catch (IOException e) {
@@ -158,7 +158,7 @@ public class ClientView {
 
     private void readMessage() {
         try {
-            ChatMessage chatMessage = SocketHandler.read(is);
+            ChatMessage chatMessage = ProtocolHandler.read(is);
 
             Node nodeToShow = null;
             if (chatMessage.isText()) {
