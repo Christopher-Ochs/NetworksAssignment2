@@ -16,7 +16,7 @@ public class ConnectionHandler implements Runnable {
     }
 
     public void sendMessage(ChatMessage message) throws IOException {
-        byte[] outMessage = message.getBytes();
+        byte[] outMessage = message.getByteArray();
         os.write(outMessage.length);
         os.write(outMessage);
         os.flush();

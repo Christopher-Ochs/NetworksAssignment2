@@ -10,12 +10,14 @@ public class ChatMessage
 {
     private Image m_imageMessage;
     private String m_stringMessage;
+    private byte[] m_byteArray;
     private boolean m_isText;
 
-    public ChatMessage(byte[] byteArray)
+    public ChatMessage(byte[] byteArray, boolean isText)
     {
-        int value = Byte.valueOf(byteArray[1]);
-        if (value == 0)
+        m_isText = isText;
+        m_byteArray = byteArray;
+        if (isText)
         {
             m_isText = true;
             m_stringMessage = new String(Arrays.copyOfRange(byteArray, 2, byteArray.length));
@@ -53,7 +55,11 @@ public class ChatMessage
 
     public byte[] getByteArray() throws IOException
     {
-        if (m_isText)
+        if (m_byteArray != null)
+        {
+            return m_byteArray;
+        }
+        else if (m_isText)
         {
             return m_stringMessage.getBytes();
         }
