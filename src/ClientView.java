@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -93,15 +94,15 @@ public class ClientView {
 
     private void initDimensions(GridPane root) {
         ColumnConstraints column1 = new ColumnConstraints();
-        column1.setPercentWidth(85);
+        column1.setPercentWidth(70);
         root.getColumnConstraints().add(column1);
 
         ColumnConstraints column2 = new ColumnConstraints();
-        column2.setPercentWidth(5);
+        column2.setPercentWidth(10);
         root.getColumnConstraints().add(column2);
 
         ColumnConstraints column3 = new ColumnConstraints();
-        column3.setPercentWidth(10);
+        column3.setPercentWidth(20);
         root.getColumnConstraints().add(column3);
 
         RowConstraints row1 = new RowConstraints();
@@ -145,14 +146,11 @@ public class ClientView {
         try {
             String outputMessage = messageField.getText();
             messageField.setText("");
+            ChatMessage message = new ChatMessage(outputMessage);
 
-            byte[] outMessage = outputMessage.getBytes();
+            SocketHandler.write(os, message);
 
-            os.write(outMessage.length);
-            os.write(outMessage);
-            os.flush();
-
-            Platform.runLater(() -> items.getChildren().add(new Text(new String(outMessage))));
+            Platform.runLater(() -> items.getChildren().add(new Text(outputMessage)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,10 +158,17 @@ public class ClientView {
 
     private void readMessage() {
         try {
-            int size = is.read();
-            byte[] message = new byte[size];
-            is.read(message, 0, size);
-            Platform.runLater(() -> items.getChildren().add(new Text(new String(message))));
+            ChatMessage chatMessage = SocketHandler.read(is);
+
+            Node nodeToShow = null;
+            if (chatMessage.isText()) {
+                nodeToShow = new Text(chatMessage.getStringMessage());
+            } else {
+                nodeToShow = new ImageView(chatMessage.getImageMessage());
+            }
+
+            Node finalNodeToShow = nodeToShow;
+            Platform.runLater(() -> items.getChildren().add(finalNodeToShow));
         } catch (IOException e) {
             e.printStackTrace();
         }

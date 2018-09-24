@@ -16,19 +16,13 @@ public class ConnectionHandler implements Runnable {
     }
 
     public void sendMessage(ChatMessage message) throws IOException {
-        byte[] outMessage = message.getByteArray();
-        os.write(outMessage.length);
-        os.write(outMessage);
-        os.flush();
+        SocketHandler.write(os, message);
     }
 
     private void readMessage() throws IOException {
-        int size = is.read();
-        byte[] message = new byte[size];
-        is.read(message, 0, size);
-        String stringMessage = new String(message);
-        MessagingServer.messages.add(stringMessage);
-        MessagingServer.messagesSent.get(this).add(stringMessage);
+        ChatMessage chatMessage = SocketHandler.read(is);
+        MessagingServer.messages.add(chatMessage);
+        MessagingServer.messagesSent.get(this).add(chatMessage);
     }
 
     @Override
