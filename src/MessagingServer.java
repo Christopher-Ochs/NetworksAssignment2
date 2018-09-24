@@ -1,31 +1,36 @@
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MessagingServer {
+
+    static ArrayList<String> messages = new ArrayList<>();
+    static HashMap<ConnectionHandler, ArrayList<String>> messagesSent = new HashMap<>();
+
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(8080);
-        Socket socket = server.accept();
 
-        OutputStream os = socket.getOutputStream();
-        InputStream is = socket.getInputStream();
+        new Thread(() -> {
+            while(!server.isClosed()) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                updateAllSockets();
+            }
+        }).start();
 
-        String message = "Hello Client!!!!";
+        while (!server.isClosed()) {
+            Socket socket = server.accept();
+            ConnectionHandler handler = new ConnectionHandler(socket);
+            new Thread(handler).start();
+        }
+    }
 
-        byte[] byte_message = message.getBytes();
-
-        os.write(byte_message.length);
-        os.write(byte_message);
-        os.flush();
-
-        int size = is.read();
-        byte[] messageIn = new byte[size];
-        is.read(messageIn, 0, size);
-
-        System.out.println(new String(messageIn));
-
-        socket.close();
+    private static void updateAllSockets() {
+        // Will be used to update each socket with the messages they are missing
     }
 }
