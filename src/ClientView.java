@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -12,6 +13,12 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Scanner;
+
 public class ClientView {
 
     private GridPane root;
@@ -21,8 +28,31 @@ public class ClientView {
     private ScrollPane scrollPane;
     private VBox items;
 
+    private Socket socket;
+    private InputStream is;
+    private OutputStream os;
+
     public ClientView(GridPane root) {
         this.root = root;
+        initView(root);
+
+        try {
+            socket = new Socket("127.0.0.1", 8080);
+
+            is = socket.getInputStream();
+            os = socket.getOutputStream();
+
+            new Thread(() -> {
+                while (!socket.isClosed()) {
+                    readMessage();
+                }
+            }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initView(GridPane root) {
         initDimensions(root);
         root.setAlignment(Pos.CENTER);
 
@@ -61,12 +91,42 @@ public class ClientView {
         root.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 sendMessage();
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Platform.exit();
             }
         });
         sendMessageButton.setOnAction(event -> sendMessage());
     }
 
     private void sendMessage() {
-        items.getChildren().add(new Text("MESSAGE"));
+        try {
+            String outputMessage = messageField.getText();
+            messageField.setText("");
+
+            byte[] outMessage = outputMessage.getBytes();
+
+            os.write(outMessage.length);
+            os.write(outMessage);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readMessage() {
+        try {
+            int size = is.read();
+            byte[] message = new byte[size];
+            is.read(message, 0, size);
+            items.getChildren().add(new Text(new String(message)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
