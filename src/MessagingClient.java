@@ -11,6 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MessagingClient extends Application {
+    /*
+        This will start up a new client GUI
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Socket Client");

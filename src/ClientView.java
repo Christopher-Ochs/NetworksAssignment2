@@ -51,6 +51,7 @@ public class ClientView {
         this.primaryStage = primaryStage;
         initView(root);
 
+        // Attempt to connect to the server
         try {
             socket = new Socket("127.0.0.1", 8080);
 
@@ -65,14 +66,9 @@ public class ClientView {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        Image image = new Image(new File("hellothere.jpeg").toURI().toString());
-//        Platform.runLater(() -> {
-//            ImageView imageView = new ImageView(image);
-//            items.getChildren().add(imageView);
-//        });
     }
 
+    // Build the GUI
     private void initView(GridPane root) {
         initDimensions(root);
         root.setAlignment(Pos.CENTER);
@@ -122,6 +118,7 @@ public class ClientView {
         root.getRowConstraints().add(row2);
     }
 
+    // Create the listeners
     private void initListeners() {
         root.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -158,6 +155,7 @@ public class ClientView {
         });
     }
 
+    // Send the message
     private void sendMessage() {
         try {
             String outputMessage = messageField.getText();
@@ -177,6 +175,7 @@ public class ClientView {
         }
     }
 
+    // Read the message
     private void readMessage() {
         try {
             ChatMessage chatMessage = ProtocolHandler.read(is);
