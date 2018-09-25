@@ -27,6 +27,6 @@ The protocol will look like the following
     
     This is followed by the whole message of length y converted to bytes
 
-- When a `byte array` is sent to the server it will have encoded in it a `byte` for the size and `byte` another for type (image or text) of the message.  
+- When a `byte array` is sent to the server it will have encoded in it a `byte` for the size of the `bye array`, a `byte` for the size fo the message and a `byte` another for type (image or text) of the message.  
 - The class `chatMessage` will handle the byte arrays and display the proper outputs to the client.  
 - The server will update each client with the proper messages every two seconds.
